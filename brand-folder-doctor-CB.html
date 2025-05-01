@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Image Block</title>
+  <script src="https://unpkg.com/block-sdk"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 16px;
+    }
+    label, input {
+      display: block;
+      margin-bottom: 8px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <label for="facility">Enter Facility ID:</label>
+  <input type="text" id="facility" placeholder="e.g. 12345" />
+
+  <script>
+    block("custom", {
+      edit(data) {
+        const facilityInput = document.getElementById('facility');
+        if (data && data.facility) {
+          facilityInput.value = data.facility;
+        }
+      },
+
+      save() {
+        const facility = document.getElementById('facility').value;
+
+        // Replace the URL with your real CloudPage or image-serving endpoint
+        const amp = %%=RedirectTo(Concat("https://your-cloudpage-url.com/image?facility=", AttributeValue("Facility_ID")))=%%;
+
+        const html = <img src="${amp}" alt="Doctor Image for Facility ${facility}" />;
+
+        return {
+          meta: {
+            facility: facility
+          },
+          html: html
+        };
+      }
+    });
+  </script>
+
+</body>
+</html>
